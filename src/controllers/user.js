@@ -26,31 +26,6 @@ module.exports=class userMongoController {
     constructor(collection, schema) {
         this.collection = mongoose.model(collection, schema);
     }
-    getAllUser = async () => {
-        try {
-            return await this.collection.find();
-        } catch (err) {
-            throw new Error('Error');
-        }
-    }
-}
-
- function createIdUser (user){
-       
-    const usuario="hola"
-    try {
-     
-      if (usuario==="hola"){
-         user=1;
-      }
-      else
-      {
-        user=2;
-      }
-    }
-    catch{
-        console.log('Error');
-    }
 }
 
 
@@ -126,7 +101,7 @@ passport.use("signup", new LocalStrategy({
     try {
       await transporter.sendMail({
         to:"retete2854@sopulit.com",
-        from:"emmalee.olson@ethereal.email",
+        from:"iva12@ethereal.email",
         subject:"Nuevo Usuario Registrado",
         html:`${user}`
     });
@@ -137,11 +112,12 @@ passport.use("signup", new LocalStrategy({
   // MANDAR MAIL AL CREAR USUARIO NUEVO
 
   const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
+    service:"gmail",
+    host: 'smtp.gmail.email',
     port: 587,
     auth: {
-        user: 'emmalee.olson@ethereal.email',
-        pass: 'x81n4qwCCBaxEgZqfu'
+        user: 'andreshosch114@gmail.com',
+        pass: "pripxpboynmzhqev"
     }
   });
   

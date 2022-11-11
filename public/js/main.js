@@ -1,19 +1,36 @@
 let socket = io();
 
-// fetch("/api/productos-test")
-//     .then(response => response.json())
-//     .then(data => {
-//         renderTable(data);
-//     })
-//     .catch(error => console.log(error));
+fetch("/api/productos")
+    .then(response => response.json())
+    .then(data => {
+        renderTable(data);
+    })
+    .catch(error => console.log(error));
 
 function renderTable(data) {
     const table = document.getElementById("table");
     const html = data.map(element => {
         return (`<tr>
-        <td>${element.name}</td>
-        <td>${element.price}</td>
-        <td><img src="${element.image}" style="height:50px"></td>
+        <td>${element.nombre}</td>
+        <td>${element.precio}</td>
+        <td>${element.descripcion  }</td>
+        <td>${element.stock}</td>
+        <td><img src="${element.imagen}" style="height:50px"></td>
+        </tr>`);
+    }).join("");
+    table.innerHTML += html;
+}
+
+
+function renderCart(data) {
+    const table = document.getElementById("carrito");
+    const html = data.map(element => {
+        return (`<tr>
+        <td>${element.nombre}</td>
+        <td>${element.precio}</td>
+        <td>${element.descripcion  }</td>
+        <td>${element.stock}</td>
+        <td><img src="${element.imagen}" style="height:50px"></td>
         </tr>`);
     }).join("");
     table.innerHTML += html;
@@ -83,6 +100,25 @@ fetch ("/loginEnv")
     <div class="avatar"><img src=${avatar} class="avatar"></img></div>`
  })
  .catch(error=>console.log(error))
+
+fetch ("/idCart")
+.then(response => response.json())
+ .then (data=>{
+    userName=data.user;
+    avatar=data.avatar;
+    id=data.id;
+    document.getElementById("userName").innerHTML=`<div class="titleLogin">Bienvenid@ ${userName} </div>
+    <div class="avatar"><img src=${avatar} class="avatar"></img></div>`
+    .then(fetch(`/api/carritos/${id}/productos`)
+    .then(response => response.json())
+    .then(data => {
+        renderCart(data);
+    }))
+    .catch(error => console.log(error));
+
+ })
+
+
 
 //loading screen
 const spinner = document.getElementById("spinner");

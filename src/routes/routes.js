@@ -45,8 +45,7 @@ route('/:id?')
     if (req.params.id) {
         res.status(400).json('no es posible crear un producto con un ID ya que es generado automaticamente');
     } else {
-        const product = await productos.save(req.body);
-        console.log(product);
+         await productos.save(req.body);
         res.status(201).json(`el producto se ha creado correctamente`);
     }
 })

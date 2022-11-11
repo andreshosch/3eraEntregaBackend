@@ -8,7 +8,9 @@ class ProductosDaoMongo extends ProdMongoController{
             descripcion: {type: String, required: true, max:400},
             codigo: {type: String, required: true},
             precio: {type: Number, required: true},
-            stock: {type: Number, required: true}
+            stock: {type: Number, required: true},
+            imagen:{type:String,required:true}
+            
         })
     }
 }

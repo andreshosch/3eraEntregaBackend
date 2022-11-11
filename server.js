@@ -44,7 +44,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
  //   //RECUPERO EL NOMBRE YA EN SESION INICIADA
  app.get('/loginEnv', (req, res) => {
   process.env.USER=req.user.name;
@@ -58,12 +57,27 @@ app.use(passport.session());
 })
 
 
+ //   //RECUPEROel ID DeL CARRO EN SECION INICIADA
+ app.get('/idCart', (req, res) => {
+  process.env.USER=req.user.name;
+  process.env.id=req.user.id;
+  process.env.avatar=req.user.avatar
+  const user = process.env.USER;
+  const id=process.env.id
+  const avatar=process.env.avatar
+  res.send({
+      user,id,avatar
+  })
+  
+})
+
+
 //RECUPERO EL NOMBRE YA EN SESION INICIADA
 app.get('/getUserNameEnv', (req, res) => {
   const user = process.env.USER;
-  const avatar=process.env.avatar
+  
     res.send({
-      user,avatar
+      user
   })
 })
 
@@ -118,7 +132,6 @@ app.get('/logoutMsj', (req, res) => {
 })
  
   app.get("/login", (req, res) => {
-    const user=req.session.user;
     res.sendFile(__dirname + "/views/login.html");
   });
 
@@ -133,6 +146,10 @@ app.get('/logoutMsj', (req, res) => {
   app.get("/signupFail", (req, res) => {
     res.sendFile(__dirname + "/views/signupFail.html");
   });
+  app.get("/cart", (req, res) => {
+    res.sendFile(__dirname + "/views/cart.html");
+  });
+
 
 
   app.post("/signup", passport.authenticate("signup", {
