@@ -5,7 +5,7 @@ const {productoDao, cartDao}= require("../dao/index.js")
 
 const routerProducto = Router();
 const routerCarrito = Router();
-const producto=new productoDao;
+const productos=new productoDao;
 const carrito=new cartDao;
 
 // routerProducto.
@@ -19,60 +19,60 @@ const carrito=new cartDao;
 //             res.status(404).send({ message: "Productos no encontrado" });
 //         }
 //     }
-    routerProducto.
-    route('/:id?')
-    .get(async (req, res) => {
-        if (req.params.id) {
-            const products = await producto.getById(req.params.id);
-            if (products) {
-                res.status(200).json(products);
-            } else {
-                res.status(404).send({ message: "Producto no encontrado" });
-            }
-        } else {
-            const products = await producto.getAll(); 
-            if (products) {
-                res.status(200).json(products);
-            } else {
-                res.status(404).send({ message: "Producto no encontrado" });
-            }
-        }
-    })
-    .post( async (req, res) => {
-        if (req.params.id) {
-            res.status(400).json('no es posible crear un producto con un ID ya que es generado automaticamente');
-        } else {
-            const product = await producto.save(req);
-            console.log(product);
-            res.status(201).json(`el producto se ha creado correctamente`);
-        }
-    })
-    .delete( async (req, res) => {
-        if (req.params.id) {
-            const product = await producto.deleteById(req.params.id);
-            if (product) {
-                res.status(200).json('producto eliminado correctamente');
-            } else {
-                res.status(404).json({ error: 'No existe producto con dicho ID' });
-            }
-        } else {
-            const product = await producto.deleteAll();
-            if (!product) {
-                res.status(200).json('todos los productos eliminados correctamente');
-            } else {
-                res.status(404).json({ error: 'error al borrar productos' });
-            }
-        }
-
-    })
-    .put( (req, res) => {
-        const product = producto.updateById(req.params.id, req.body);
+routerProducto.
+route('/:id?')
+.get(async (req, res) => {
+    if (req.params.id) {
+        const product = await productos.getById(req.params.id);
         if (product) {
-            res.status(201).json(`el producto se ha actualizado correctamente`)
+            res.status(200).json(product);
+        } else {
+            res.status(404).send({ message: "Producto no encontrado" });
+        }
+    } else {
+        const products = await productos.getAll();
+        if (products) {
+            res.status(200).json(products);
+        } else {
+            res.status(404).send({ message: "Producto no encontrado" });
+        }
+    }
+})
+.post( async (req, res) => {
+    if (req.params.id) {
+        res.status(400).json('no es posible crear un producto con un ID ya que es generado automaticamente');
+    } else {
+        const product = await productos.save(req.body);
+        console.log(product);
+        res.status(201).json(`el producto se ha creado correctamente`);
+    }
+})
+.delete( async (req, res) => {
+    if (req.params.id) {
+        const product = await productos.deleteById(req.params.id);
+        if (product) {
+            res.status(200).json('producto eliminado correctamente');
         } else {
             res.status(404).json({ error: 'No existe producto con dicho ID' });
         }
-    })
+    } else {
+        const products = await productos.deleteAll();
+        if (!products) {
+            res.status(200).json('todos los productos eliminados correctamente');
+        } else {
+            res.status(404).json({ error: 'error al borrar productos' });
+        }
+    }
+
+})
+.put( (req, res) => {
+    const product = productos.updateById(req.params.id, req.body);
+    if (product) {
+        res.status(201).json(`el producto se ha actualizado correctamente`)
+    } else {
+        res.status(404).json({ error: 'No existe producto con dicho ID' });
+    }
+})
     routerCarrito.
     route('/')
     .post(async (req, res) => {

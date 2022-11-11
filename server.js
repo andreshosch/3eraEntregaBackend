@@ -64,14 +64,14 @@ passport.use("signup", new LocalStrategy({
 }, async (req, mail, password, done) => {
   const user = await User.findOne({ mail });
   let id
-     id=await ( User.findOne({id}))
+     id=db.collection("users").count
    console.log(id)
 
   if (user) {
    return done(new Error("El usuario ya existe!"),
    null);
   }
-if(user){
+if(id==0){
   const id= 1;
   const address = req.body.address;
   const name = req.body.names;
@@ -87,7 +87,7 @@ if(user){
 }
 else
 {
-  const id= id++;
+  const id= id;
   const address = req.body.address;
   const name = req.body.names;
   const direction = req.body.direction;
