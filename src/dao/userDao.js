@@ -2,7 +2,7 @@ const userMongoController=require('../controllers/user.js')
 
 class userDaoMongo extends userMongoController{
     constructor(){
-        super ('carts',{
+        super ('users',{
             id: { type: Number, required: true },
             mail: {type: String},
             password: {type: String},

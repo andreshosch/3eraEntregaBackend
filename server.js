@@ -20,7 +20,7 @@ const app = express();
 const httpserver = http(app)
 const io = new ioServer(httpserver)
 
- app.use("/public", express.static('./public/'));
+app.use("/public", express.static('./public/'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/productos', routerProducto);
@@ -44,77 +44,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-//LOGUEO DE USUARIO
 
-passport.use("login", new LocalStrategy(async (mail, password, done) => {
-     const user = await User.findOne({ mail });
-     if (user){
-   const  passHash = user.password;
-     if (!user || !comparePassword(password, passHash)) {
-       return done(null, null, { message: "Invalid username or password" });
-     }
-   }
-    return done(null, user);
-  }));
-
-//REGISTRO DE USUARIO
-
-passport.use("signup", new LocalStrategy({
-  passReqToCallback: true
-}, async (req, mail, password, done) => {
-  const user = await User.findOne({ mail });
-  let id
-     id=db.collection("users").count
-   console.log(id)
-
-  if (user) {
-   return done(new Error("El usuario ya existe!"),
-   null);
-  }
-if(id==0){
-  const id= 1;
-  const address = req.body.address;
-  const name = req.body.names;
-  const direction = req.body.direction;
-  const age = req.body.age;
-  const phone = req.body.phone;
-  const avatar =`../public/images/${req.body.avatar}` ;
-  const hashedPassword = hashPassword(password);
-  const newUser = new User({ id,mail, password: hashedPassword , address,name,direction,age,phone,avatar });
-  await newUser.save();
-  send(newUser);
-  return done(null, newUser);
-}
-else
-{
-  const id= id;
-  const address = req.body.address;
-  const name = req.body.names;
-  const direction = req.body.direction;
-  const age = req.body.age;
-  const phone = req.body.phone;
-  const avatar =`../public/images/${req.body.avatar}` ;
-  const hashedPassword = hashPassword(password);
-  const newUser = new User({ id,mail, password: hashedPassword , address,name,direction,age,phone,avatar });
-  await newUser.save();
-  send(newUser);
-  return done(null, newUser);
-}
-}));
-  
-  passport.serializeUser((user, done) => {
-    done(null, user._id);
-  });
-  
-  passport.deserializeUser(async (id, done) => {
-    id = Types.ObjectId(id);
-    const user = await User.findById(id);
-    done(null, user);
-  });
-
-   
-//   //RECUPERO EL NOMBRE YA EN SESION INICIADA
-app.get('/loginEnv', (req, res) => {
+ //   //RECUPERO EL NOMBRE YA EN SESION INICIADA
+ app.get('/loginEnv', (req, res) => {
   process.env.USER=req.user.name;
   process.env.avatar=req.user.avatar;
   const user = process.env.USER;
@@ -134,7 +66,6 @@ app.get('/getUserNameEnv', (req, res) => {
       user,avatar
   })
 })
-
 
 app.get("/", (req,res)=>{
 
@@ -218,29 +149,8 @@ app.get('/logoutMsj', (req, res) => {
       res.redirect('/');
   });
 
-// MANDAR MAIL AL CREAR USUARIO NUEVO
 
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    auth: {
-        user: 'dedrick.volkman43@ethereal.email',
-        pass: '438svGwGy71Tjmd1qf'
-    }
-  });
   
-  async function send(user) {
-    try {
-      await transporter.sendMail({
-        to:"caxogap211@harcity.com",
-        from:"dedrick.volkman43@ethereal.email",
-        subject:"Nuevo Usuario Registrado",
-        html:`${user}`
-    });
-    } catch (err) {
-      console.log(err);
-    }
-  }
 const PORT = process.env.PORT || 8080;
 
 const server = httpserver.listen(PORT, () => {

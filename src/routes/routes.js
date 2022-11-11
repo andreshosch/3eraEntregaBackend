@@ -1,12 +1,14 @@
 
 const {Router}=require("express");
 const {createFakeProducts}=require("../controllers/products.js")
-const {productoDao, cartDao}= require("../dao/index.js")
+const {productoDao, cartDao,userDao}= require("../dao/index.js")
 
 const routerProducto = Router();
 const routerCarrito = Router();
+
 const productos=new productoDao;
 const carrito=new cartDao;
+
 
 // routerProducto.
 //     route('/productos-test')
@@ -19,6 +21,7 @@ const carrito=new cartDao;
 //             res.status(404).send({ message: "Productos no encontrado" });
 //         }
 //     }
+
 routerProducto.
 route('/:id?')
 .get(async (req, res) => {
