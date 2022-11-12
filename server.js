@@ -178,7 +178,7 @@ app.get('/buyCart', async(req, res) => {
        sendWhatsapp(name,mail)
        sendMail(name,mail,JSON.stringify(productos))
        sendSms(phone)
-  //deleteCartBuy(id)
+       deleteCartBuy(id)
   res.redirect("/buySuccesfull")
   logger.log("info",`Ingreso a la ruta${req.url}`)
   
