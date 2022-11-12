@@ -2,19 +2,11 @@ const express=require("express");
  const {routerProducto,routerCarrito}=require("./src/routes/routes.js")
 const{Server:http}=require ("http");
 const {Server:ioServer}=require ("socket.io");
-const User=require("./src/schema/schemaUser.js")
-const {saveMsjs, getMsjs}=require ("./src/controllers/mensajes.js")
+const {saveMsjs, getMsjs, sendWhatsapp, sendMail, sendSms}=require ("./src/controllers/mensajes.js")
 const session =require("express-session")
 const MongoStore=require("connect-mongo");
-const LocalStrategy = require('passport-local').Strategy;
 const passport = require("passport");
-const { comparePassword, hashPassword } = require("./utils")
-// const {connect} = require('./src/config/dbConfig.js');
-const { Types } = require("mongoose");
-
-const nodemailer= require('nodemailer');
-const { argv0 } = require("process");
-const { db } = require("./src/schema/schemaProducts.js");
+const { db } = require("./src/schema/schemaCarts.js");
 
 const app = express();
 const httpserver = http(app)
@@ -57,7 +49,7 @@ app.use(passport.session());
 })
 
 
- //   //RECUPEROel ID DeL CARRO EN SECION INICIADA
+ //   //RECUPEROel ID DEL CARRO EN SECION INICIADA
  app.get('/idCart', (req, res) => {
   process.env.USER=req.user.name;
   process.env.id=req.user.id;
@@ -101,7 +93,7 @@ app.get("/", (req,res)=>{
 io.on('connection', async (socket) => {
     console.log('Usuario conectado');
     socket.on('enviarMensaje', (msj) => {
-        saveMsjs(msj);
+        // saveMsjs(msj);
     })
 
     socket.emit ('mensajes', await getMsjs());
@@ -129,6 +121,21 @@ app.get('/logoutMsj', (req, res) => {
     catch (err) {
         console.log(err);
     }
+})
+
+app.get('/buyCart', (req, res) => {
+  process.env.USER=req.user.mail;
+  process.env.id=req.user.id;
+  process.env.phone=req.user.phone
+ 
+  
+ const productos=process.env.carts
+  const mail = process.env.USER;
+  const phone=process.env.phone
+    //sendWhatsapp(mail)
+  //  sendMail(mail,productos)
+  //  sendSms(phone)
+
 })
  
   app.get("/login", (req, res) => {

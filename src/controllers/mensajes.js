@@ -2,11 +2,7 @@ const config =require("../config/dbConfig.js")
 const mongoose =require("mongoose");
 const {normalizeMsj}=require("./normalizr.js")
 const twilio=require('twilio')
-
-
-
-
-
+const nodemailer= require('nodemailer');
 
 try {
     mongoose.connect(config.mongoDb.url, config.mongoDb.options)
@@ -50,52 +46,67 @@ const getMsjs = async () => {
 }
 
 
-module.exports={saveMsjs,getMsjs}
+
 
 
 // //MENSAJES SMS CON TWILIO
 
-// const accountSid = 'AC9fefc59c281978bc8db78b2ecbdccb33'; 
-// const authToken = 'fe685c01b076299109c97fb6861794dc'; 
-// const client = twilio(accountSid, authToken); 
+const accountSid = 'AC2510716c68b2261fb6fd373fd7fe5ce0'; 
+const authToken = 'c2d1dcb80cab806638c34b4191b252b9'; 
+const client = twilio(accountSid, authToken); 
 
 
-// // const smsOption={
-// //     from:"+12535533470",
-// //     to: "+543424055157",
-// //     body:"probando le mensaje de texto"
-// // }
-
-// // async function sendSms() {
-// //     try {
-// //       const info = await client.messages.create(smsOption);
-// //       console.log(info);
-// //     } catch(err) {
-// //       console.log(err)
-// //     }
-// //   }
-
-//    const whatsAppOption={
-//     from:"whatsapp:+14155238886",
-//     to: "whatsapp:+5493424055157",
-//     body:"probando le mensaje de texto"
-// }
-
-// async function sendWhatsapp() {
-//     try {
-//       const info = await client.messages.create(whatsAppOption);
-//       console.log(info);
-//     } catch(err) {
-//       console.log(err)
-//     }
-//   }
-
-// // sendSms();
-// sendWhatsapp();
  
-// // client.messages 
-// //       .create({         
-// //          to: '+543424055157' 
-// //        }) 
-// //       .then(message => console.log(message.sid)) 
-// //       .done();
+
+async function sendSms() {
+    const smsOption={
+        from:"+13603008856",
+        to: "+5493424055157",
+        body:"Su pedido ha sido recibido y se encuentra en proceso"
+    }
+    try {
+      const info = await client.messages.create(smsOption);
+      console.log(info);
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
+ 
+async function sendWhatsapp(user) {
+    const whatsAppOption={
+        from:"whatsapp:+14155238886",
+        to: "whatsapp:+5493424055157",
+        body:`nuevo pedido de ${user}`
+    }    
+    try {
+      const info = await client.messages.create(whatsAppOption);
+      console.log(info);
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
+  async function sendMail(user,listCart) {
+    try {
+        await transporter.sendMail({
+          to:"retete2854@sopulit.com",
+          from:"iva12@ethereal.email",
+          subject:`nuevo pedido de ${user}`,
+           html:`${listCart}`
+      });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    const transporter = nodemailer.createTransport({
+        service:"gmail",
+        host: 'smtp.gmail.email',
+        port: 587,
+        auth: {
+            user: 'andreshosch114@gmail.com',
+            pass: "pripxpboynmzhqev"
+        }
+      });
+
+      module.exports={saveMsjs,getMsjs,sendMail,sendSms,sendWhatsapp}

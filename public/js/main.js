@@ -49,11 +49,15 @@ botonEnviar.addEventListener('click', (e) => {
             edad: ingresoMensaje.children.edad.value,
             alias: ingresoMensaje.children.alias.value,
             avatar: ingresoMensaje.children.avatar.value,
+           
         },
         text: ingresoMensaje.children.text.value
     }
-    socket.emit('enviarMensaje', mensaje);
+     socket.emit('enviarMensaje', mensaje);
+   
 })
+
+
 
 //NORMALIZAR ESQUEMAS
 const authorsSchema = new normalizr.schema.Entity('authors');

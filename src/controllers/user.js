@@ -79,7 +79,7 @@ passport.use("signup", new LocalStrategy({
     const hashedPassword = hashPassword(password);
     const newUser = new User({ id,mail, password: hashedPassword , address,name,direction,age,phone,avatar });
     await newUser.save();
-    send(newUser);
+    sendMailUser(newUser);
     return done(null, newUser);
   }
   }));
@@ -97,7 +97,7 @@ passport.use("signup", new LocalStrategy({
      
  
   
-  async function send(user) {
+  async function sendMailUser(user) {
     try {
       await transporter.sendMail({
         to:"retete2854@sopulit.com",

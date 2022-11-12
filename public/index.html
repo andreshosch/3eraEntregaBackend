@@ -19,17 +19,21 @@
         <div class="user">
           <h3 id="userName"></h3> 
         </div>
+       
         <div class="right">
-          <a href="../cart"><button type="button" id="cart" class=" text-center btn_inicio">Carrito</button></a>
-          <button type="submit" id="logout" class=" text-center btn_inicio">Logout</button>
+            <form action="/buyCart"method="get">
+          <a href="../cart"><button type="button" id="cart" class=" text-center btn_inicio">Productos</button></a>
+          <button type="submit" class="btn_inicio text-center">Comprar</button>
+          <button type="button" id="logout" class=" text-center btn_inicio">Logout</button>
          </div>
+        </form>
      </div>
     
     <br><br>
-    <h2 class="text-center title">PRODUCTOS</h2>
+    <h2 class="text-center title">CARRITO DE COMPRAS</h2>
     <br><br>
     <table class="table background_table">
-        <tbody id="table" class="text-center">
+        <tbody id="carrito" class="text-center">
             <tr>
                 <th>Producto</th>
                 <th>Precio</th>
