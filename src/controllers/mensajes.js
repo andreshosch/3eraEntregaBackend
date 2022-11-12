@@ -86,7 +86,7 @@ async function sendSms() {
 async function sendWhatsapp(name,mail) {
     const whatsAppOption={
         from:"whatsapp:+14155238886",
-        to: "whatsapp:+5493424055157",
+        to: "whatsapp:+ponernumero",
         body:`nuevo pedido de Nombre: ${name} Mail: ${mail}`
     }    
     try {
