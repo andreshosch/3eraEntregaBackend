@@ -3,7 +3,7 @@
 
 const config = {
     mongoDb: {
-        url: 'mongodb+srv://andres:Dorian23@cluster0.ohq5xhd.mongodb.net/ecommerce?retryWrites=true&w=majority',
+        url: process.env.DB,
         options: {
             useNewUrlParser: true,
             useUnifiedTopology: true

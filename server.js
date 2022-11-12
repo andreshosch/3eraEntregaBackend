@@ -130,7 +130,7 @@ app.get("/", (req,res)=>{
 io.on('connection', async (socket) => {
     console.log('Usuario conectado');
     socket.on('enviarMensaje', (msj) => {
-        // saveMsjs(msj);
+      saveMsjs(msj);
     })
 
     socket.emit ('mensajes', await getMsjs());

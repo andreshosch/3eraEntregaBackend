@@ -49,12 +49,10 @@ botonEnviar.addEventListener('click', (e) => {
             edad: ingresoMensaje.children.edad.value,
             alias: ingresoMensaje.children.alias.value,
             avatar: ingresoMensaje.children.avatar.value,
-           
         },
         text: ingresoMensaje.children.text.value
     }
-     socket.emit('enviarMensaje', mensaje);
-   
+    socket.emit('enviarMensaje', mensaje);
 })
 
 
@@ -92,6 +90,7 @@ const renderComp = (msj, denormMsjs) => {
     const compresion = ((msjLength - denormMsjsLength) / msjLength * 100).toFixed(2);
     comp.innerHTML = `(Compresion: ${compresion}%)`;
 }
+
 
 //LOGIN-LOGOUT 
 
