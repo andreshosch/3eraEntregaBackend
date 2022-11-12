@@ -3,6 +3,16 @@ const mongoose =require("mongoose");
 const {normalizeMsj}=require("./normalizr.js")
 const twilio=require('twilio')
 const nodemailer= require('nodemailer');
+const { db } = require("../schema/schemaCarts.js");
+const {
+  loggerDev,
+  loggerProd
+} = require("../../public/js/logger_config.js");
+const NODE_ENV = process.env.NODE_ENV || "development";
+const logger = NODE_ENV === "production"
+? loggerProd
+: loggerDev
+
 
 try {
     mongoose.connect(config.mongoDb.url, config.mongoDb.options)
@@ -40,8 +50,8 @@ const getMsjs = async () => {
     try {
         const mensajes = await msjModel.find();
         return normalizeMsj(mensajes);
-    } catch (error) {
-        throw new Error(error);
+    }  catch(err) {
+      logger.log("error",err)
     }
 }
 
@@ -52,7 +62,7 @@ const getMsjs = async () => {
 // //MENSAJES SMS CON TWILIO
 
 const accountSid = 'AC2510716c68b2261fb6fd373fd7fe5ce0'; 
-const authToken = 'c2d1dcb80cab806638c34b4191b252b9'; 
+const authToken = 'ece58980e7f024cf715ba559ef75a3ab'; 
 const client = twilio(accountSid, authToken); 
 
 
@@ -67,36 +77,45 @@ async function sendSms() {
     try {
       const info = await client.messages.create(smsOption);
       console.log(info);
-    } catch(err) {
-      console.log(err)
+    }  catch(err) {
+      logger.log("error",err)
     }
   }
 
  
-async function sendWhatsapp(user) {
+async function sendWhatsapp(name,mail) {
     const whatsAppOption={
         from:"whatsapp:+14155238886",
         to: "whatsapp:+5493424055157",
-        body:`nuevo pedido de ${user}`
+        body:`nuevo pedido de Nombre: ${name} Mail: ${mail}`
     }    
     try {
       const info = await client.messages.create(whatsAppOption);
       console.log(info);
-    } catch(err) {
-      console.log(err)
+    }  catch(err) {
+      logger.log("error",err)
     }
   }
 
-  async function sendMail(user,listCart) {
+  async function sendMail(name,mail,listCart) {
     try {
         await transporter.sendMail({
           to:"retete2854@sopulit.com",
           from:"iva12@ethereal.email",
-          subject:`nuevo pedido de ${user}`,
-           html:`${listCart}`
+          subject:`nuevo pedido de Nombre: ${name} Mail: ${mail}`,
+          html:`${listCart}`
       });
-      } catch (err) {
-        console.log(err);
+      }  catch(err) {
+        logger.log("error",err)
+      }
+    }
+
+    async function deleteCartBuy(idCart){
+      try{
+       await db.collection("carts").deleteOne({id:idCart});
+      }
+      catch(err) {
+        logger.log("error",err)
       }
     }
     const transporter = nodemailer.createTransport({
@@ -109,4 +128,4 @@ async function sendWhatsapp(user) {
         }
       });
 
-      module.exports={saveMsjs,getMsjs,sendMail,sendSms,sendWhatsapp}
+      module.exports={saveMsjs,getMsjs,sendMail,sendSms,sendWhatsapp,deleteCartBuy}

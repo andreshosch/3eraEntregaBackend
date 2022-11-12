@@ -1,26 +1,11 @@
-
 const {Router}=require("express");
-const {createFakeProducts}=require("../controllers/products.js")
 const {productoDao, cartDao,userDao}= require("../dao/index.js")
-
+const { db } = require("../schema/schemaCarts")
 const routerProducto = Router();
 const routerCarrito = Router();
 
 const productos=new productoDao;
 const carrito=new cartDao;
-
-
-// routerProducto.
-//     route('/productos-test')
-//     .get(async (req, res) => {
-
-//         const products = await createFakeProducts();
-//         if (products.length > 0) {
-//             res.status(200).json(products);
-//         } else {
-//             res.status(404).send({ message: "Productos no encontrado" });
-//         }
-//     }
 
 routerProducto.
 route('/:id?')
@@ -99,14 +84,18 @@ route('/:id?')
     routerCarrito.
     route('/:id/productos')
     .get(async (req, res) => {
+        const countCart= await db.collection("carts").countDocuments();
+        console.log(countCart)
+        if (countCart>1){
         const products = await carrito.getById(req.params.id);
         if (products.length > 0) {
             res.status(200).json(products);
         } else {
             res.status(404).send({ message: "Carrito no encontrado" });
         }
-
+    }
     })
+
     .post((req, res) => {
         const producto = carrito.addProduct(req.params.id, req.body);
         if (producto) {

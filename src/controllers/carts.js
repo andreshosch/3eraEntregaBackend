@@ -1,15 +1,24 @@
-const mongoose=require("mongoose")
-
+const mongoose=require("mongoose");
+const { db } = require("../schema/schemaUser");
+const {
+    loggerDev,
+    loggerProd
+  } = require("../../public/js/logger_config.js");
+  const NODE_ENV = process.env.NODE_ENV || "development";
+  const logger = NODE_ENV === "production"
+  ? loggerProd
+  : loggerDev
 module.exports=class CartMongoController {
     constructor(collection,schema) {
         this.collection = mongoose.model(collection, schema);
     }
+    
 
     getAllCart = async () => {
         try {
             return await this.collection.find();
-        } catch (err) {
-            throw new Error('Error');
+        }  catch(err) {
+            logger.log("error",err)
         }
     }
 
@@ -28,8 +37,10 @@ module.exports=class CartMongoController {
                 const result = await newElement.save();
                 return result;
             }
-        } catch {
-            throw new Error('Error');
+        }  catch(err) {
+            logger.log("error",err)
+            
+            
         }
     }
 
@@ -52,26 +63,30 @@ module.exports=class CartMongoController {
                     $set: { productos: productsInCart },
                 }
             )
-        } catch (error) {
-            console.log(error);
-            throw new Error('Error adding product');
+        }  catch(err) {
+            logger.log("error",err)
         }
     }
-
 
     getById = async (id) => {
         try {
+            const countCart= await db.collection("carts").countDocuments();
             const cart = await this.collection.findOne({ id: id });
-            const products = cart?.productos;
-            if (products) {
-                return products;
-            } else {
-                throw new Error('No existe el carrito');
+            if (countCart!=0){
+                const products = cart?.productos;
+                if (products) {
+                   return products;
+                }    else {
+                     throw new Error('No existe el carrito');
+                }
             }
-        } catch {
-            throw new Error('Error pidiendo los datos');
+        
+        }     catch(err) {
+             logger.log("error",err)
+            
         }
     }
+    
 
 
     deleteProduct = async (id, prodId) => {
@@ -97,11 +112,15 @@ module.exports=class CartMongoController {
             } else {
                 return false
             }
-        } catch {
-            throw new Error('Error borrando el producto')
+        }  catch(err) {
+            logger.log("error",err)
         }
+        
     }
+    
+} 
 
 
-}
+   
+
 
