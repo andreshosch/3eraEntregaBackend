@@ -168,15 +168,17 @@ app.get('/buyCart', async(req, res) => {
   process.env.id=req.user.id;
   process.env.name=req.user.name
   process.env.phone=req.user.phone
-  const id=parseInt( process.env.id)
-  const productos=await db.collection("carts").findOne({id:`${id}`})
+  // const idProductos=process.env.id
+   const id=parseInt( process.env.id)
+  const productos=await db.collection("carts").findOne({id:id})
+  console.log(productos)
   const mail = process.env.USER;
   const phone=process.env.phone
   const name= process.env.name
-  //    sendWhatsapp(name,mail)
-  //    sendMail(name,mail,JSON.stringify(productos))
-  //    sendSms(phone)
-  deleteCartBuy(id)
+       sendWhatsapp(name,mail)
+       sendMail(name,mail,JSON.stringify(productos))
+       sendSms(phone)
+  //deleteCartBuy(id)
   res.redirect("/buySuccesfull")
   logger.log("info",`Ingreso a la ruta${req.url}`)
   

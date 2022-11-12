@@ -6,5 +6,7 @@
 
 2 - dejo 2 usuarios ya registrados para realizar pruebas
 
+3 - Dentro de la carpeta images/assets dejo la documentacion con las pruebas del funcionamiento de la app
+
 usuario: andres@hotmail.com pass: andres
 usuario: ailen@hotmail.com pass: ailen
